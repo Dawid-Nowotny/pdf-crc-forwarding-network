@@ -5,7 +5,7 @@ import sys
 from Node import Node
 from network import create_network
 
-async def run_node(node_name, port):
+async def run_node(node_name: str, port: int) -> None:
     network = create_network()
     node = Node(node_name, port, network)
     await node.start_server()

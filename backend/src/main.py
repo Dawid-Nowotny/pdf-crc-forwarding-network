@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
+from .routers import node_router
+
+app = FastAPI(root_path="/api/v1")
 
 origins = [
     "http://localhost:3000",
@@ -15,3 +17,5 @@ app.add_middleware(
         allow_methods=["*"],
         allow_headers=["*"]
 )
+
+app.include_router(node_router.router, prefix="/node", tags=["Node"])

@@ -1,10 +1,12 @@
 import heapq
 
+from typing import Optional, List
+
 class Graph:
     def __init__(self):
         self.nodes = {}
     
-    def add_edge(self, node1, node2, weight=1):
+    def add_edge(self, node1: str, node2: str, weight:int = 1) -> None:
         if node1 not in self.nodes:
             self.nodes[node1] = []
         if node2 not in self.nodes:
@@ -12,7 +14,7 @@ class Graph:
         self.nodes[node1].append((node2, weight))
         self.nodes[node2].append((node1, weight))
     
-    def dijkstra(self, start, end):
+    def dijkstra(self, start: str, end: str) -> Optional[List[str]]:
         queue = [(0, start, [])]
         visited = set()
         

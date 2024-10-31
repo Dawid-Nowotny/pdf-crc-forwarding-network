@@ -1,6 +1,6 @@
 from Graph import Graph
 
-def create_network():
+def create_network() -> Graph:
     network = Graph()
     network.add_edge('Node1', 'Node2')
     network.add_edge('Node1', 'Node3')
