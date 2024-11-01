@@ -14,6 +14,3 @@ class Node:
         async with websockets.serve(self.handle_connection, "localhost", self.port):
             print(f"Server started at ws://localhost:{self.port}")
             await asyncio.Future()
-
-    async def handle_connection(self):
-        pass
