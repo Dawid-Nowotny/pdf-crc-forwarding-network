@@ -7,7 +7,6 @@ class AdminNodeRequest(BaseModel):
 
     @field_validator("admin_node")
     def validate_node(cls, node: str) -> str:
-        print(f"Walidacja węzła: {node}")
         if node not in NODE_PORTS:
             raise ValueError(f"Invalid node: {node}")
         return node

@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 import psutil
 
 import subprocess
-from typing import Dict, List
+from typing import List
 
 from src.constants import NODE_PORTS
 from src.schemas.NodesRequest import NodesRequest
