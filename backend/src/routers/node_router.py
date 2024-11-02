@@ -20,4 +20,5 @@ async def send_pdf_to_node(
     target_node: str = Form(...)
 ):
     node_request = node_service.validate_pdf_request(admin_node, target_node)
+    node_service.check_if_ports_are_up()
     await pdf_service.validate_pdf(file)

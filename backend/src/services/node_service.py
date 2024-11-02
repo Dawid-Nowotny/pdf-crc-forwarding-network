@@ -2,13 +2,18 @@ from fastapi import HTTPException, status
 import psutil
 
 import subprocess
+from typing import Dict, List
 
 from src.constants import NODE_PORTS
 from src.schemas.NodesRequest import NodesRequest
 
-def start_websockets(admin_node: str) -> None: 
+def get_open_ports() -> List[int]:
     active_ports = {conn.laddr.port for conn in psutil.net_connections(kind='tcp') if conn.status == psutil.CONN_LISTEN}
     open_ports = [port for port in NODE_PORTS.values() if port in active_ports]
+    return open_ports
+
+def start_websockets(admin_node: str) -> None: 
+    open_ports = get_open_ports()
 
     if open_ports:
         raise HTTPException(
@@ -20,6 +25,15 @@ def start_websockets(admin_node: str) -> None:
         subprocess.Popen(
             ["cmd", "/c", "start", "python", "domain/node_runner.py", node_name, str(port)]
             + (["--admin"] if node_name == admin_node else [])
+        )
+
+def check_if_ports_are_up():
+    open_ports = get_open_ports()
+
+    if not open_ports:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="No active websocket ports available to send the PDF."
         )
 
 def close_ports() -> None:
