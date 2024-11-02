@@ -4,14 +4,9 @@ import psutil
 import subprocess
 
 from src.constants import NODE_PORTS
+from src.schemas.NodesRequest import NodesRequest
 
-def start_websockets(admin_node: str) -> None:
-    if admin_node not in NODE_PORTS:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid admin node: {admin_node}"
-        )
-    
+def start_websockets(admin_node: str) -> None: 
     active_ports = {conn.laddr.port for conn in psutil.net_connections(kind='tcp') if conn.status == psutil.CONN_LISTEN}
     open_ports = [port for port in NODE_PORTS.values() if port in active_ports]
 
@@ -54,4 +49,13 @@ def close_ports() -> None:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to close some ports: {error_details}"
+        )
+    
+def validate_pdf_request(admin_node: str, target_node: str) -> NodesRequest:
+    try:
+        return NodesRequest(admin_node=admin_node, target_node=target_node)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
         )
