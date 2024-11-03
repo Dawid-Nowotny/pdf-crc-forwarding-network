@@ -1,16 +1,27 @@
 import asyncio
 
 import sys
+import argparse
 
-from Node import Node
+from NodeAdmin import NodeAdmin
+from NodePC import NodePC
 from network import create_network
 
-async def run_node(node_name: str, port: int) -> None:
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("name", type=str)
+    parser.add_argument("port", type=int)
+    parser.add_argument("--admin", action="store_true")
+    return parser.parse_args()
+
+async def run_node() -> None:
+    args = parse_args()
     network = create_network()
-    node = Node(node_name, port, network)
+    node_class = NodeAdmin if args.admin else NodePC
+    node = node_class(args.name, args.port, network)
     await node.start_server()
 
 if __name__ == "__main__":
     node_name = sys.argv[1]
     port = int(sys.argv[2])
-    asyncio.run(run_node(node_name, port))
+    asyncio.run(run_node())
