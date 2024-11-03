@@ -5,7 +5,7 @@ import subprocess
 from typing import List
 
 from src.constants import NODE_PORTS
-from src.schemas.NodesRequest import NodesRequest
+from src.schemas.PDFRequest import PDFRequest
 
 def get_open_ports() -> List[int]:
     active_ports = {conn.laddr.port for conn in psutil.net_connections(kind='tcp') if conn.status == psutil.CONN_LISTEN}
@@ -65,9 +65,9 @@ def close_ports() -> None:
             detail=f"Failed to close some ports: {error_details}"
         )
     
-def validate_pdf_request(admin_node: str, target_node: str) -> NodesRequest:
+def validate_pdf_request(admin_node: str, target_node: str, polynomial: str) -> PDFRequest:
     try:
-        return NodesRequest(admin_node=admin_node, target_node=target_node)
+        return PDFRequest(admin_node=admin_node, target_node=target_node, polynomial=polynomial)
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
