@@ -1,7 +1,7 @@
-import aiohttp
 from websockets import WebSocketServerProtocol
 
 import json
+import base64
 
 from Node import Node
 from Graph import Graph
@@ -16,15 +16,21 @@ class NodePC(Node):
             data = json.loads(message)
             pdf_encoded = data.get("pdf_content")
             target_node = data.get("target_node")
+            polynomial = data.get("polynomial")
+            received_crc_value = data.get("crc_value")
+
+            pdf_bytes = base64.b64decode(pdf_encoded)
+            if not self.verify_and_calculate_crc(pdf_bytes, polynomial, received_crc_value):
+                return
 
             if self.name == target_node:
-                self.read_pdf_content(pdf_encoded)
+                self.read_pdf_content(pdf_bytes)
                 print("Final destination reached, PDF received successfully.")
                 return
             
             path = self.graph.dijkstra(self.name, target_node)
             if path and len(path) > 1:
                 next_node = path[1]
-                await self.send_to_next_node(pdf_encoded, target_node, next_node)
+                await self.send_to_next_node(pdf_encoded, target_node, next_node, polynomial, received_crc_value)
             else:
                 print("Error: No valid path found from this node.")

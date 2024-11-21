@@ -30,7 +30,7 @@ async def validate_pdf(file: UploadFile):
             detail="Uploaded file is not a valid PDF."
         )
     
-async def pdf_transfer(file: UploadFile, admin_node: str, target_node: str) -> None:
+async def pdf_transfer(file: UploadFile, admin_node: str, target_node: str, polynomial: str) -> None:
     admin_port = NODE_PORTS[admin_node]
     ws_url = f"ws://localhost:{admin_port}/pdf-transfer"
     
@@ -41,5 +41,6 @@ async def pdf_transfer(file: UploadFile, admin_node: str, target_node: str) -> N
         async with session.ws_connect(ws_url) as ws:
             await ws.send_json({
                 "pdf_content": encoded_pdf,
-                "target_node": target_node
+                "target_node": target_node,
+                "polynomial": polynomial
             })

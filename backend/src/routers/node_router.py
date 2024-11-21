@@ -17,12 +17,13 @@ def stop_websockets():
 async def send_pdf_to_node(
     file: UploadFile,
     admin_node: str = Form(...),
-    target_node: str = Form(...)
+    target_node: str = Form(...),
+    polynomial: str = Form(...)
 ):
-    node_request = node_service.validate_pdf_request(admin_node, target_node)
+    node_request = node_service.validate_pdf_request(admin_node, target_node, polynomial)
     node_service.check_if_ports_are_up()
     await pdf_service.validate_pdf(file)
 
     file.file.seek(0)
 
-    await pdf_service.pdf_transfer(file, node_request.admin_node, node_request.target_node)
+    await pdf_service.pdf_transfer(file, node_request.admin_node, node_request.target_node, node_request.polynomial)
