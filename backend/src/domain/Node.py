@@ -1,6 +1,7 @@
 import asyncio
 import aiohttp
 import websockets
+import json
 from pypdf import PdfReader
 
 from io import BytesIO
@@ -11,7 +12,7 @@ from CRC import CRC
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from src.constants import NODE_PORTS
+from src.constants import NODE_PORTS, COMMUNICATION_PORT
 
 class Node:
     def __init__(self, name: str, port: int, graph: Graph):
@@ -37,6 +38,14 @@ class Node:
                     "crc_value": crc_value
                 })
                 print(f"Sent PDF to next node: {next_node}")
+
+    async def send_to_communication_port(self, message: dict):
+        uri = f"ws://localhost:{COMMUNICATION_PORT}"
+        try:
+            async with websockets.connect(uri) as websocket:
+                await websocket.send(json.dumps(message))
+        except Exception as e:
+            print(f"Error sending message to communication WebSocket: {e}")
 
     def verify_and_calculate_crc(self, pdf_bytes: bytes, polynomial: str, received_crc_value: int = None) -> bool:
         crc_function = self.crc_calculator.get_crc_function(polynomial)

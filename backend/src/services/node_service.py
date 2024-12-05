@@ -1,10 +1,11 @@
-from fastapi import HTTPException, status
 import psutil
+import asyncio
+from fastapi import HTTPException, status
 
 import subprocess
 from typing import List
 
-from src.constants import NODE_PORTS
+from src.constants import NODE_PORTS, COMMUNICATION_PORT
 from src.schemas.PDFRequest import PDFRequest
 
 def get_open_ports() -> List[int]:
@@ -20,6 +21,10 @@ def start_websockets(admin_node: str) -> None:
             status_code=status.HTTP_409_CONFLICT,
             detail=f"Cannot start websockets: Ports already in use - {', '.join(map(str, open_ports))}"
         )
+
+    subprocess.Popen(
+        ["cmd", "/c", "start", "python", "domain/node_runner.py", "Node_communication", str(COMMUNICATION_PORT), "--communication"]
+    )
 
     for node_name, port in NODE_PORTS.items():
         subprocess.Popen(
@@ -38,8 +43,9 @@ def check_if_ports_are_up():
 
 def close_ports() -> None:
     failed_ports = []
+    all_ports = list(NODE_PORTS.values()) + [COMMUNICATION_PORT]
 
-    for port in NODE_PORTS.values():
+    for port in all_ports:
         closed = False
         for conn in psutil.net_connections(kind='tcp'):
             if conn.laddr.port == port and conn.status == psutil.CONN_LISTEN:

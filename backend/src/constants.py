@@ -10,3 +10,5 @@ NODE_PORTS = {
     'Node9': 3009,
     'Node10': 3010
 }
+
+COMMUNICATION_PORT = 5000
