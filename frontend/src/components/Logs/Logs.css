@@ -1,0 +1,44 @@
+.Logs {
+    font-family: Arial, sans-serif;
+  }
+  
+  h2 {
+    font-size: 1.8em;
+    margin-bottom: 15px;
+  }
+  
+  .log-container {
+    max-height: 400px;
+    overflow-y: auto;
+    background: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .log-entry {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .expand-button {
+    margin-left: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 3px 8px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  .expand-button:hover {
+    background: #0056b3;
+  }
+  
+  .expanded-log {
+    margin: 10px 0 0 20px;
+    background: #f3f3f3;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
