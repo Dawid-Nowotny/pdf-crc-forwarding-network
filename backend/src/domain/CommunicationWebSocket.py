@@ -7,7 +7,7 @@ class CommunicationWebSocket:
         self.messages = []
         self.clients = set()
 
-    async def handle_connection(self, websocket: WebSocketServerProtocol):
+    async def handle_connection(self, websocket: WebSocketServerProtocol) -> None:
         self.clients.add(websocket)
         print(f"Client connected: {websocket.remote_address}")
 
@@ -22,16 +22,15 @@ class CommunicationWebSocket:
             self.clients.remove(websocket)
             print(f"Client disconnected: {websocket.remote_address}")
 
-    async def broadcast(self, message: str):
-        # Rozsyłaj wiadomość do wszystkich podłączonych klientów
-        if self.clients:  # Jeśli są aktywni klienci
+    async def broadcast(self, message: str) -> None:
+        if self.clients:
             for client in self.clients:
                 try:
                     await client.send(json.dumps({"log": message}))
                 except Exception as e:
                     print(f"Error sending message to client: {e}")
 
-    async def start_server(self):
+    async def start_server(self) -> None:
         server = await serve(self.handle_connection, "localhost", self.port)
         print(f"Communication WebSocket started at ws://localhost:{self.port}")
         await server.wait_closed()
