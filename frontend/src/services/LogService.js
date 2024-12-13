@@ -62,6 +62,10 @@ class LogService {
         this.webSocket = null;
       }
     }
+
+    clearLogs() {
+      this.logs.splice(0, this.logs.length);
+    }
   }
   
   const logService = new LogService();

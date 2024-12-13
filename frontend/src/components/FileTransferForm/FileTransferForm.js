@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { sendFile } from '../../services/api';
 import './FileTransferForm.css';
+import logService from '../../services/LogService';
 
 function FileTransferForm() {
   const [file, setFile] = useState(null);
@@ -9,6 +10,7 @@ function FileTransferForm() {
   const [polynomial, setPolynomial] = useState('');
 
   const handleSubmit = async (e) => {
+    logService.clearLogs();
     e.preventDefault();
 
     if (!file || !admin_node || !target_node || !polynomial) {
