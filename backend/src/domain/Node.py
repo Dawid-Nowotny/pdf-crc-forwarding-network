@@ -28,16 +28,28 @@ class Node:
     async def send_to_next_node(self, pdf_encoded: str, target_node: str, next_node: str, polynomial: str, crc_value: int) -> None:
         node_port = NODE_PORTS[next_node]
         ws_url = f"ws://localhost:{node_port}/pdf-transfer"
-        
-        async with aiohttp.ClientSession() as session:
-            async with session.ws_connect(ws_url) as ws:
-                await ws.send_json({
-                    "pdf_content": pdf_encoded,
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.ws_connect(ws_url) as ws:
+                    await ws.send_json({
+                        "pdf_content": pdf_encoded,
+                        "target_node": target_node,
+                        "polynomial": polynomial,
+                        "crc_value": crc_value
+                    })
+                    print(f"Sent PDF to next node: {next_node}")
+        except aiohttp.ClientError as e:
+            print(f"Failed to connect to node {next_node}: {e}")
+            error_message = {
+                "current_node": self.name,
+                "status": "CONNECTION_FAILED",
+                "details": {
+                    "failed_node": next_node,
                     "target_node": target_node,
-                    "polynomial": polynomial,
-                    "crc_value": crc_value
-                })
-                print(f"Sent PDF to next node: {next_node}")
+                    "error": str(e)
+                }
+            }
+            await self.send_to_communication_port(error_message)
 
     async def send_to_communication_port(self, message: dict):
         uri = f"ws://localhost:{COMMUNICATION_PORT}"
