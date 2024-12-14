@@ -1,17 +1,115 @@
 import React from 'react';
+import logService from '../../services/LogService';
 import './Graph.css';
 
-const Graph = () => {
+import { useCallback, createContext, useContext, useEffect, useState } from 'react';
+import {
+  ReactFlow,
+  useNodesState,
+  useEdgesState,
+  addEdge,
+} from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import CustomNode from './CustomNode';
+ 
+const nodeTypes = {
+  custom: CustomNode,
+};
+
+const initialNodes = [
+  { id: 'Node1', type: 'custom', position: { x: 0, y: 0 }, data: { label: 'Node1' }},
+  { id: 'Node2', type: 'custom', position: { x: 200, y: -50 }, data: { label: 'Node2' } },
+  { id: 'Node3', type: 'custom', position: { x: 200, y: 150 }, data: { label: 'Node3' } },
+  { id: 'Node4', type: 'custom', position: { x: 400, y: -50 }, data: { label: 'Node4' } },
+  { id: 'Node5', type: 'custom', position: { x: 400, y: 150 }, data: { label: 'Node5' } },
+  { id: 'Node6', type: 'custom', position: { x: 600, y: 50 }, data: { label: 'Node6' } },
+  { id: 'Node7', type: 'custom', position: { x: 800, y: 150 }, data: { label: 'Node7' } },
+  { id: 'Node8', type: 'custom', position: { x: 1000, y: -50 }, data: { label: 'Node8' } },
+  { id: 'Node9', type: 'custom', position: { x: 1000, y: 150 }, data: { label: 'Node9' } },
+  { id: 'Node10', type: 'custom', position: { x: 1200, y: 150 }, data: { label: 'Node10' } },
+];
+
+const initialEdges = [
+  { id: 'e1-2', source: 'Node1', target: 'Node2' },
+  { id: 'e1-3', source: 'Node1', target: 'Node3' },
+  { id: 'e2-4', source: 'Node2', target: 'Node4' },
+  { id: 'e3-5', source: 'Node3', target: 'Node5' },
+  { id: 'e4-5', source: 'Node4', target: 'Node5' },
+  { id: 'e5-6', source: 'Node5', target: 'Node6' },
+  { id: 'e6-7', source: 'Node6', target: 'Node7' },
+  { id: 'e7-8', source: 'Node7', target: 'Node8' },
+  { id: 'e8-9', source: 'Node8', target: 'Node9' },
+  { id: 'e9-10', source: 'Node9', target: 'Node10'},
+  { id: 'e4-6', source: 'Node4', target: 'Node6' },
+  { id: 'e5-7', source: 'Node5', target: 'Node7' },
+  { id: 'e2-8', source: 'Node2', target: 'Node8' },
+];
+
+const Graph = ({ onGraphReset }) => {
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  const onConnect = useCallback(
+    (params) => setEdges((eds) => addEdge(params, eds)),
+    [setEdges],
+  );
+
+  const colorGraph = () => {
+    console.log(logService.getLogs());
+    const logs = logService.getLogs();
+    logs.forEach((log, index) => {
+      if (index < logs.length - 1) {
+        const currentNode = log.node;
+        const nextNode = logs[index + 1].node;
+        setEdges((prevEdges) =>
+          prevEdges.map((edge) =>
+            edge.source === currentNode && edge.target === nextNode
+          ? { 
+              ...edge, 
+              style: { ...edge.style, stroke: '#00FF00', strokeWidth: 2 }, 
+              animated: true, 
+              markerEnd: { type: 'arrowclosed', color: '#00FF00' }
+            }
+          : edge
+            )
+        );
+      }
+    });
+  }
+
+  const resetGraph = () => {
+    return new Promise((resolve) => {
+      setEdges(initialEdges);
+      
+      resolve();
+    });
+  };
+
+  useEffect(() => {
+    const handleLogChange = () => {
+      console.log(logService.getShouldColorGraph());
+      if (logService.getShouldColorGraph()) {
+        colorGraph();
+      }
+      else {
+        resetGraph();
+      }
+    };
+
+    logService.subscribe(handleLogChange);
+    return () => logService.unsubscribe(handleLogChange);
+  }, []);
+
   return (
-    <div>
-      <h2>File Path through Network</h2>
-      <div>
-        <img
-          src="https://www.computerhope.com/jargon/r/ring.png"
-          alt="Graph Illustration"
-          className="Graph-image"
-        />
-      </div>
+    <div style={{ width: '100%', height: '400px' }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        nodeTypes={nodeTypes}
+      />
     </div>
   );
 };

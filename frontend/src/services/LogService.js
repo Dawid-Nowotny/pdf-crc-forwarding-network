@@ -9,6 +9,8 @@ class LogService {
       this.subscribers = [];
       this.websocketURL = 'ws://127.0.0.1:5000';
       
+      this.shouldColorGraph = false;
+      
       LogService.instance = this;
     }
   
@@ -65,6 +67,14 @@ class LogService {
 
     clearLogs() {
       this.logs.splice(0, this.logs.length);
+    }
+
+    setShouldColorGraph(value) {
+      this.shouldColorGraph = value;
+    }
+
+    getShouldColorGraph() {
+      return this.shouldColorGraph;
     }
   }
   

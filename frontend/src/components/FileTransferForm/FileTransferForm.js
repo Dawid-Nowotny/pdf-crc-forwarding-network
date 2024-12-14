@@ -5,12 +5,13 @@ import logService from '../../services/LogService';
 
 function FileTransferForm() {
   const [file, setFile] = useState(null);
-  const [admin_node, setAdminNode] = useState('');
-  const [target_node, setTargetNode] = useState('');
-  const [polynomial, setPolynomial] = useState('');
-
+  const [admin_node, setAdminNode] = useState('Node1');
+  const [target_node, setTargetNode] = useState('Node5');
+  const [polynomial, setPolynomial] = useState('11111111');
+  
   const handleSubmit = async (e) => {
     logService.clearLogs();
+    logService.setShouldColorGraph(false);
     e.preventDefault();
 
     if (!file || !admin_node || !target_node || !polynomial) {
@@ -26,6 +27,9 @@ function FileTransferForm() {
 
     try {
       await sendFile(formData);
+      setTimeout(() => {
+        logService.setShouldColorGraph(true);
+      }, 100);
       alert('File sent successfully!');
     } catch (error) {
       console.error(error);
