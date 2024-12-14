@@ -7,12 +7,13 @@ const Logs = () => {
   const [expandedLogs, setExpandedLogs] = useState({});
 
   useEffect(() => {
-    logService.openConnection();
     const handleNewLogs = (newLogs) => {
-      setLogs(newLogs);
+      setLogs([...newLogs]);
     };
 
     logService.subscribe(handleNewLogs);
+
+    logService.openConnection();
 
     return () => {
       logService.unsubscribe(handleNewLogs);
@@ -34,7 +35,6 @@ const Logs = () => {
         {logs.map((log, index) => (
           <div key={index} className="log-entry">
             <div>
-              {/* Zwięzły widok loga */}
               <span>
                 <strong>Received:</strong> {"{"}node: "{log.node}", status: "{log.status}"{"}"}
               </span>
@@ -46,7 +46,6 @@ const Logs = () => {
               </button>
             </div>
 
-            {/* Rozwinięty widok loga */}
             {expandedLogs[index] && (
               <pre className="expanded-log">
                 {JSON.stringify(log, null, 2)}
