@@ -61,21 +61,26 @@ const Graph = ({ onGraphReset }) => {
       if (index < logs.length - 1) {
         const currentNode = log.node;
         const nextNode = logs[index + 1].node;
+
         setEdges((prevEdges) =>
-          prevEdges.map((edge) =>
-            edge.source === currentNode && edge.target === nextNode
-          ? { 
-              ...edge, 
-              style: { ...edge.style, stroke: '#00FF00', strokeWidth: 2 }, 
-              animated: true, 
-              markerEnd: { type: 'arrowclosed', color: '#00FF00' }
+          prevEdges.map((edge) => {
+            if ((edge.source === currentNode && edge.target === nextNode) || 
+              (edge.source === nextNode && edge.target === currentNode)) {
+              const isForward = edge.source === currentNode && edge.target === nextNode;
+              return {
+                ...edge,
+                style: { ...edge.style, stroke: '#00FF00', strokeWidth: 2 },
+                animated: true,
+                markerEnd: isForward ? { type: 'arrowclosed', color: '#00FF00' } : undefined,
+                markerStart: !isForward ? { type: 'arrowclosed', color: '#00FF00' } : undefined
+              };
             }
-          : edge
-            )
+            return edge;
+          })
         );
       }
     });
-  }
+  };
 
   const resetGraph = () => {
     return new Promise((resolve) => {
