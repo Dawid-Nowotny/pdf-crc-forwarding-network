@@ -36,7 +36,10 @@ const Logs = () => {
           <div key={index} className="log-entry">
             <div>
               <span>
-                <strong>Received:</strong> {"{"}node: "{log.node}", status: "{log.status}"{"}"}
+                <strong>Received: </strong>
+                {"{"} 
+                {log.node ? "node" : "target node"}: "{log.node || log.details?.target_node}", status: "{log.status}"
+                {"}"}
               </span>
               <button
                 onClick={() => toggleExpandLog(index)}
