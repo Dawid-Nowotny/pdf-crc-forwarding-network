@@ -2,12 +2,11 @@ import React from 'react';
 import logService from '../../services/LogService';
 import './Graph.css';
 
-import { useCallback, createContext, useContext, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
   ReactFlow,
   useNodesState,
   useEdgesState,
-  addEdge,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import CustomNode from './CustomNode';
@@ -47,12 +46,7 @@ const initialEdges = [
 
 const Graph = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-  const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges],
-  );
+  const [edges, setEdges] = useEdgesState(initialEdges);
 
   const colorGraph = () => {
     const logs = logService.getLogs();
@@ -116,8 +110,6 @@ const Graph = () => {
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
         nodeTypes={nodeTypes}
       />
     </div>
