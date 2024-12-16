@@ -37,7 +37,7 @@ const initialEdges = [
   { id: 'e4-5', source: 'Node4', target: 'Node5' },
   { id: 'e5-6', source: 'Node5', target: 'Node6' },
   { id: 'e6-7', source: 'Node6', target: 'Node7' },
-  { id: 'e7-8', source: 'Node7', target: 'Node8' },
+  { id: 'e8-7', source: 'Node8', target: 'Node7' },
   { id: 'e8-9', source: 'Node8', target: 'Node9' },
   { id: 'e9-10', source: 'Node9', target: 'Node10'},
   { id: 'e4-6', source: 'Node4', target: 'Node6' },
@@ -45,7 +45,7 @@ const initialEdges = [
   { id: 'e2-8', source: 'Node2', target: 'Node8' },
 ];
 
-const Graph = ({ onGraphReset }) => {
+const Graph = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
@@ -55,27 +55,33 @@ const Graph = ({ onGraphReset }) => {
   );
 
   const colorGraph = () => {
-    console.log(logService.getLogs());
     const logs = logService.getLogs();
     logs.forEach((log, index) => {
       if (index < logs.length - 1) {
         const currentNode = log.node;
-        const nextNode = logs[index + 1].node;
+        const nextNode = logs[index + 1].node || logs[index + 1].details?.target_node;
 
         setEdges((prevEdges) =>
           prevEdges.map((edge) => {
-            if ((edge.source === currentNode && edge.target === nextNode) || 
-              (edge.source === nextNode && edge.target === currentNode)) {
-              const isForward = edge.source === currentNode && edge.target === nextNode;
-              return {
-                ...edge,
-                style: { ...edge.style, stroke: '#00FF00', strokeWidth: 2 },
-                animated: true,
-                markerEnd: isForward ? { type: 'arrowclosed', color: '#00FF00' } : undefined,
-                markerStart: !isForward ? { type: 'arrowclosed', color: '#00FF00' } : undefined
-              };
-            }
-            return edge;
+              if (
+                  (edge.source === currentNode && edge.target === nextNode) ||
+                  (edge.source === nextNode && edge.target === currentNode)
+              ) {
+                  const isForward = edge.source === currentNode && edge.target === nextNode;
+                  const isSuccess = logs[index + 1].status === "CRC_SUCCESS";
+                  return {
+                      ...edge,
+                      style: { 
+                          ...edge.style, 
+                          stroke: isSuccess ? '#00FF00' : '#FF0000',
+                          strokeWidth: 2 
+                      },
+                      animated: true,
+                      markerEnd: isForward ? { type: 'arrowclosed', color: isSuccess ? '#00FF00' : '#FF0000' } : undefined,
+                      markerStart: !isForward ? { type: 'arrowclosed', color: isSuccess ? '#00FF00' : '#FF0000' } : undefined
+                  };
+              }
+              return edge;
           })
         );
       }
@@ -92,7 +98,6 @@ const Graph = ({ onGraphReset }) => {
 
   useEffect(() => {
     const handleLogChange = () => {
-      console.log(logService.getShouldColorGraph());
       if (logService.getShouldColorGraph()) {
         colorGraph();
       }
