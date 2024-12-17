@@ -70,7 +70,42 @@ def close_ports() -> None:
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to close some ports: {error_details}"
         )
+
+def close_single_node(node_name: str) -> None:
+    if node_name not in NODE_PORTS:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Node '{node_name}' not found."
+        )
     
+    port = NODE_PORTS[node_name]
+    closed = False
+
+    for conn in psutil.net_connections(kind='tcp'):
+        if conn.laddr.port == port and conn.status == psutil.CONN_LISTEN:
+            try:
+                process = psutil.Process(conn.pid)
+                process.terminate()
+                process.wait(timeout=3)
+                closed = True
+                break
+            except (psutil.NoSuchProcess, psutil.AccessDenied) as e:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail=f"Failed to terminate process for {node_name} on port {port}: {str(e)}"
+                )
+            except psutil.TimeoutExpired:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail=f"Process for {node_name} on port {port} did not terminate in the expected time."
+                )
+    
+    if not closed:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No listening process found for {node_name} on port {port}."
+        )
+
 def validate_pdf_request(admin_node: str, target_node: str, polynomial: str) -> PDFRequest:
     try:
         return PDFRequest(admin_node=admin_node, target_node=target_node, polynomial=polynomial)
