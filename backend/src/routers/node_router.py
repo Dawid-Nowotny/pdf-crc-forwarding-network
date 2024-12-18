@@ -9,9 +9,10 @@ router = APIRouter()
 async def start_websockets(admin_node_request: AdminNodeRequest):
     node_service.start_websockets(admin_node_request.admin_node)
 
-@router.delete("/stop-websockets", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/stop-websockets", status_code=status.HTTP_200_OK)
 def stop_websockets():
-    node_service.close_ports()
+    result = node_service.close_ports()
+    return result
 
 @router.post("/send-pdf", status_code=status.HTTP_204_NO_CONTENT)
 async def send_pdf_to_node(
@@ -27,3 +28,7 @@ async def send_pdf_to_node(
     file.file.seek(0)
 
     await pdf_service.pdf_transfer(file, node_request.admin_node, node_request.target_node, node_request.polynomial)
+
+@router.delete("/close-node/{node_name}", status_code=status.HTTP_204_NO_CONTENT)
+def close_node(node_name: str):
+    node_service.close_single_node(node_name)

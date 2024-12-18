@@ -1,23 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header/Header';
+import SimulationControls from './components/SimulationControls/SimulationControls';
+import FileTransfer from './components/FileTransferForm/FileTransferForm';
+import Logs from './components/Logs/Logs';
+import Graph from './components/Graph/Graph';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <div class="AppContainer">
+        <div class="AppLeft">
+          <div class="bar_graph">Simulation Controls</div>
+          <Graph />
+        </div>
+        <div class="AppRight">
+          <SimulationControls />
+          <FileTransfer />
+          <Logs />
+        </div>
+      </div>
     </div>
   );
 }

@@ -23,6 +23,17 @@ class NodeAdmin(Node):
 
             crc_value = self.verify_and_calculate_crc(pdf_bytes, polynomial)
 
+            message_to_send = {
+                "node": self.name,
+                "status": "CRC_SUCCESS" if crc_value else "CRC_ERROR",
+                "details": {
+                    "crc_value": crc_value,
+                    "polynomial": polynomial,
+                    "message": "Verification successful." if crc_value else "Verification failed."
+                }
+            }
+            await self.send_to_communication_port(message_to_send)
+
             path = self.graph.dijkstra(self.name, target_node)
             if path and len(path) > 1:
                 next_node = path[1]

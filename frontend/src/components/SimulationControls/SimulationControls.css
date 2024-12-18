@@ -1,0 +1,42 @@
+.bar {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 100%;
+    text-align: center;
+    background-color: #282c34;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.content {
+    border: 1px solid #282c34;
+    padding: 7px;
+    background: #ebebeb;
+    padding: 10px;
+  }
+
+  .buttoncontainer {
+    display: flex;
+    gap: 5px; 
+    width: 100%;
+  }
+  
+  .button2 {
+    flex: 1;
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid #282c34;
+    background-color: #b4b9c1;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button2:hover {
+    background-color: #ebebeb;
+    color: black;
+  }

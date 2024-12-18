@@ -1,6 +1,7 @@
 import asyncio
 import aiohttp
 import websockets
+import json
 from pypdf import PdfReader
 
 from io import BytesIO
@@ -11,7 +12,7 @@ from CRC import CRC
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from src.constants import NODE_PORTS
+from src.constants import NODE_PORTS, COMMUNICATION_PORT
 
 class Node:
     def __init__(self, name: str, port: int, graph: Graph):
@@ -27,16 +28,36 @@ class Node:
     async def send_to_next_node(self, pdf_encoded: str, target_node: str, next_node: str, polynomial: str, crc_value: int) -> None:
         node_port = NODE_PORTS[next_node]
         ws_url = f"ws://localhost:{node_port}/pdf-transfer"
-        
-        async with aiohttp.ClientSession() as session:
-            async with session.ws_connect(ws_url) as ws:
-                await ws.send_json({
-                    "pdf_content": pdf_encoded,
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.ws_connect(ws_url) as ws:
+                    await ws.send_json({
+                        "pdf_content": pdf_encoded,
+                        "target_node": target_node,
+                        "polynomial": polynomial,
+                        "crc_value": crc_value
+                    })
+                    print(f"Sent PDF to next node: {next_node}")
+        except aiohttp.ClientError as e:
+            print(f"Failed to connect to node {next_node}: {e}")
+            error_message = {
+                "current_node": self.name,
+                "status": "CONNECTION_FAILED",
+                "details": {
+                    "failed_node": next_node,
                     "target_node": target_node,
-                    "polynomial": polynomial,
-                    "crc_value": crc_value
-                })
-                print(f"Sent PDF to next node: {next_node}")
+                    "error": str(e)
+                }
+            }
+            await self.send_to_communication_port(error_message)
+
+    async def send_to_communication_port(self, message: dict):
+        uri = f"ws://localhost:{COMMUNICATION_PORT}"
+        try:
+            async with websockets.connect(uri) as websocket:
+                await websocket.send(json.dumps(message))
+        except Exception as e:
+            print(f"Error sending message to communication WebSocket: {e}")
 
     def verify_and_calculate_crc(self, pdf_bytes: bytes, polynomial: str, received_crc_value: int = None) -> bool:
         crc_function = self.crc_calculator.get_crc_function(polynomial)

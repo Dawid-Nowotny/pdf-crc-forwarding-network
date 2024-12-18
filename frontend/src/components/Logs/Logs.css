@@ -1,0 +1,61 @@
+.Logs {
+    font-family: Arial, sans-serif;
+  }
+  
+  .bar {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 100%;
+    text-align: center;
+    background-color: #282c34;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    margin-top: 10px;
+  }
+
+  .log-container {
+    border: 1px solid #282c34;
+    max-height: 400px;
+    overflow-y: auto;
+    background: #ebebeb;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .log-entry {
+    padding: 5px 0;
+    border-bottom: 1px solid #717680;
+  }
+
+  .expand-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .expand-button {
+    padding: 7px 15px;
+    margin: 5px 0;
+    border: 1px solid #282c34;
+    background-color: #282c34;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .expand-button:hover {
+    background-color: #ebebeb;
+    color: black;
+  }
+  
+  .expanded-log {
+    margin: 10px 0 0 20px;
+    background: #f3f3f3;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  

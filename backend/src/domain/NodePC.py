@@ -20,7 +20,20 @@ class NodePC(Node):
             received_crc_value = data.get("crc_value")
 
             pdf_bytes = base64.b64decode(pdf_encoded)
-            if not self.verify_and_calculate_crc(pdf_bytes, polynomial, received_crc_value):
+            crc_success = self.verify_and_calculate_crc(pdf_bytes, polynomial, received_crc_value)
+
+            message_to_send = {
+                "node": self.name,
+                "status": "CRC_SUCCESS" if crc_success else "CRC_ERROR",
+                "details": {
+                    "crc_value": received_crc_value,
+                    "polynomial": polynomial,
+                    "message": "Verification successful." if crc_success else "Verification failed."
+                }
+            }
+            await self.send_to_communication_port(message_to_send)
+
+            if not crc_success:
                 return
 
             if self.name == target_node:
