@@ -41,7 +41,7 @@ def check_if_ports_are_up():
             detail="No active websocket ports available to send the PDF."
         )
 
-def close_ports() -> None:
+def close_ports() -> dict:
     failed_ports = []
     all_ports = list(NODE_PORTS.values()) + [COMMUNICATION_PORT]
 
@@ -64,12 +64,10 @@ def close_ports() -> None:
         if not closed:
             failed_ports.append((port, "No listening process found."))
 
-    if failed_ports:
-        error_details = "; ".join([f"Port {port}: {error}" for port, error in failed_ports])
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to close some ports: {error_details}"
-        )
+    return {
+        "status": "completed" if not failed_ports else "completed_with_warnings",
+        "warnings": [{"port": port, "error": error} for port, error in failed_ports]
+    }
 
 def close_single_node(node_name: str) -> None:
     if node_name not in NODE_PORTS:

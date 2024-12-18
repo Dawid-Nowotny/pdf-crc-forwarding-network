@@ -16,16 +16,16 @@ const nodeTypes = {
 };
 
 const initialNodes = [
-  { id: 'Node1', type: 'custom', position: { x: 0, y: 0 }, data: { label: 'Node1' }},
-  { id: 'Node2', type: 'custom', position: { x: 200, y: -50 }, data: { label: 'Node2' } },
-  { id: 'Node3', type: 'custom', position: { x: 200, y: 150 }, data: { label: 'Node3' } },
-  { id: 'Node4', type: 'custom', position: { x: 400, y: -50 }, data: { label: 'Node4' } },
-  { id: 'Node5', type: 'custom', position: { x: 400, y: 150 }, data: { label: 'Node5' } },
-  { id: 'Node6', type: 'custom', position: { x: 600, y: 50 }, data: { label: 'Node6' } },
-  { id: 'Node7', type: 'custom', position: { x: 800, y: 150 }, data: { label: 'Node7' } },
-  { id: 'Node8', type: 'custom', position: { x: 1000, y: -50 }, data: { label: 'Node8' } },
-  { id: 'Node9', type: 'custom', position: { x: 1000, y: 150 }, data: { label: 'Node9' } },
-  { id: 'Node10', type: 'custom', position: { x: 1200, y: 150 }, data: { label: 'Node10' } },
+  { id: 'Node1', type: 'custom', position: { x: 15, y: 100 }, data: { label: 'Node1' } },
+  { id: 'Node2', type: 'custom', position: { x: 215, y: 50 }, data: { label: 'Node2' } },
+  { id: 'Node3', type: 'custom', position: { x: 215, y: 250 }, data: { label: 'Node3' } },
+  { id: 'Node4', type: 'custom', position: { x: 415, y: 50 }, data: { label: 'Node4' } },
+  { id: 'Node5', type: 'custom', position: { x: 415, y: 250 }, data: { label: 'Node5' } },
+  { id: 'Node6', type: 'custom', position: { x: 615, y: 150 }, data: { label: 'Node6' } },
+  { id: 'Node7', type: 'custom', position: { x: 815, y: 250 }, data: { label: 'Node7' } },
+  { id: 'Node8', type: 'custom', position: { x: 1015, y: 50 }, data: { label: 'Node8' } },
+  { id: 'Node9', type: 'custom', position: { x: 1015, y: 250 }, data: { label: 'Node9' } },
+  { id: 'Node10', type: 'custom', position: { x: 1215, y: 250 }, data: { label: 'Node10' } },
 ];
 
 const initialEdges = [
@@ -105,12 +105,13 @@ const Graph = () => {
   }, []);
 
   return (
-    <div style={{ width: '100%', height: '400px' }}>
+    <div style={{ width: '100%', height: '100%', minHeight: '650px' }} class="content_graph">
       <ReactFlow
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         nodeTypes={nodeTypes}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.85 }}
       />
     </div>
   );

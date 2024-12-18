@@ -30,11 +30,11 @@ const Logs = () => {
 
   return (
     <div className="Logs">
-      <h2>Logs</h2>
+      <div class="bar">Logs</div>
       <div className="log-container">
         {logs.map((log, index) => (
           <div key={index} className="log-entry">
-            <div>
+           <div className="expand-container">
               <span>
                 <strong>Received: </strong>
                 {"{"} 

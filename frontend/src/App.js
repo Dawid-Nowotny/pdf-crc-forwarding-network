@@ -9,10 +9,17 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <Graph />
-      <SimulationControls />
-      <FileTransfer />
-      <Logs />
+      <div class="AppContainer">
+        <div class="AppLeft">
+          <div class="bar_graph">Simulation Controls</div>
+          <Graph />
+        </div>
+        <div class="AppRight">
+          <SimulationControls />
+          <FileTransfer />
+          <Logs />
+        </div>
+      </div>
     </div>
   );
 }

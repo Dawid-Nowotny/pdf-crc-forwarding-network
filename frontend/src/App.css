@@ -3,9 +3,37 @@
   font-family: Arial, sans-serif;
 }
 
+.AppContainer {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+}
+
+.AppLeft {
+  padding: 10px;
+  width: 65%;
+}
+
+.AppRight {
+  padding: 10px;
+  width: 35%;
+}
 
 button {
   margin: 5px;
   padding: 10px;
   font-size: 16px;
+}
+
+.bar_graph {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  width: 100%;
+  text-align: center;
+  background-color: #282c34;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  margin-top: 10px;
 }

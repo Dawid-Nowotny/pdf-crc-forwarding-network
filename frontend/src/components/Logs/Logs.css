@@ -2,37 +2,54 @@
     font-family: Arial, sans-serif;
   }
   
-  h2 {
-    font-size: 1.8em;
-    margin-bottom: 15px;
+  .bar {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 100%;
+    text-align: center;
+    background-color: #282c34;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+    margin-top: 10px;
   }
-  
+
   .log-container {
+    border: 1px solid #282c34;
     max-height: 400px;
     overflow-y: auto;
-    background: #f9f9f9;
+    background: #ebebeb;
     padding: 10px;
-    border: 1px solid #ddd;
     text-align: left;
   }
   
   .log-entry {
     padding: 5px 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #717680;
   }
-  
+
+  .expand-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .expand-button {
-    margin-left: 10px;
-    background: #007bff;
+    padding: 7px 15px;
+    margin: 5px 0;
+    border: 1px solid #282c34;
+    background-color: #282c34;
     color: white;
-    border: none;
-    padding: 3px 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
     cursor: pointer;
-    border-radius: 3px;
+    transition: background-color 0.3s ease;
   }
   
   .expand-button:hover {
-    background: #0056b3;
+    background-color: #ebebeb;
+    color: black;
   }
   
   .expanded-log {

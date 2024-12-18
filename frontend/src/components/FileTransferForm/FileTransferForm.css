@@ -1,0 +1,92 @@
+.bar {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 100%;
+    text-align: center;
+    background-color: #282c34;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .content {
+    border: 1px solid #282c34;
+    background: #ebebeb;
+    padding: 10px;
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Odstęp między elementami */
+    width: 100%;
+  }
+  
+  .form-container div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .form-container label {
+    font-weight: bold;
+    color: black;
+    background-color: #c3c3cc; 
+    border: 1px solid #282c34;
+    border-right: 0px;
+    padding: 10px 15px; 
+    font-size: 13px;
+    width: 40%; 
+    flex-shrink: 0; 
+    box-sizing: border-box;
+  }
+  
+  .form-container input {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #282c34;
+    background-color: #f9f9f9;
+    color: #282c34;
+    font-size: 13px;
+    width: 60%; 
+    box-sizing: border-box;
+  }
+  
+  .form-container input:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+
+  .form-container select {
+    padding: 9px;
+    margin: 5px 0;
+    border: 1px solid #282c34;
+    background-color: #f9f9f9;
+    color: #282c34;
+    font-size: 13px;
+    width: 60%;
+    box-sizing: border-box;
+  }
+  
+  .form-container select:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  .form-container button {
+    padding: 10px 20px;
+    margin: 5px 0;
+    border: 1px solid #282c34;
+    background-color: #282c34;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .form-container button:hover {
+    background-color: #ebebeb;
+    color: black;
+  }
