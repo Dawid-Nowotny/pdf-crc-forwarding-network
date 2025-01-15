@@ -46,7 +46,7 @@ class Node:
                 "details": {
                     "failed_node": next_node,
                     "target_node": target_node,
-                    "error": str(e)
+                    "message": str(e)
                 }
             }
             await self.send_to_communication_port(error_message)

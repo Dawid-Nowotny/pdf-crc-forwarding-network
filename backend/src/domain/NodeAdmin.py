@@ -47,7 +47,7 @@ class NodeAdmin(Node):
                 "node": self.name,
                 "status": "ERROR",
                 "details": {
-                    "error": "Uploaded file is too large."
+                    "message": "Uploaded file is too large."
                 }
             }
             await self.send_to_communication_port(message_to_send)

@@ -93,6 +93,7 @@ const Graph = () => {
   useEffect(() => {
     const handleLogChange = () => {
       if (logService.getShouldColorGraph()) {
+        resetGraph();
         colorGraph();
       }
       else {
@@ -105,7 +106,7 @@ const Graph = () => {
   }, []);
 
   return (
-    <div style={{ width: '100%', height: '100%', minHeight: '650px' }} class="content_graph">
+    <div style={{ width: '100%', height: '100%' }} class="content_graph">
       <ReactFlow
         nodes={nodes}
         edges={edges}
