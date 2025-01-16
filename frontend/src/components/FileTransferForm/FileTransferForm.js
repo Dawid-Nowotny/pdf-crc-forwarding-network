@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { sendFile } from '../../services/api';
 import './FileTransferForm.css';
 import logService from '../../services/LogService';
@@ -8,14 +8,33 @@ function FileTransferForm() {
   const [admin_node, setAdminNode] = useState('Node1');
   const [target_node, setTargetNode] = useState('Node5');
   const [polynomial, setPolynomial] = useState('11111111');
-  
+  const [message, setMessage] = useState('');
+  const [type, setType] = useState(''); 
+  const [showMessage, setShowMessage] = useState(false);
+
+  const handleAddMessage = (message, type) => {
+    setMessage(message);
+    setType(type);
+    setShowMessage(true);
+  };
+
+  useEffect(() => {
+    if (showMessage) {
+      const timer = setTimeout(() => {
+        setShowMessage(false);
+      }, 5000); 
+      return () => clearTimeout(timer);
+    }
+  }, [showMessage]);
+
+
   const handleSubmit = async (e) => {
     logService.clearLogs();
     logService.setShouldColorGraph(false);
     e.preventDefault();
 
     if (!file || !admin_node || !target_node || !polynomial) {
-      alert('Please fill in all fields');
+      handleAddMessage('Please fill in all fields!', 'error');
       return;
     }
 
@@ -30,10 +49,10 @@ function FileTransferForm() {
       setTimeout(() => {
         logService.setShouldColorGraph(true);
       }, 100);
-      alert('File sent successfully!');
+      handleAddMessage('File sent successfully!', 'success');
     } catch (error) {
       console.error(error);
-      alert('An error occurred while sending the file.');
+      handleAddMessage('An error occurred while sending the file!', 'error');
     }
   };
 
@@ -107,6 +126,9 @@ function FileTransferForm() {
           <button type="submit">Send</button>
         </form>
       </div>
+      {showMessage && (
+        <div class="MessageBarContainer"><div class={type === 'success' ? 'MessageBar' : 'MessageBarError'}>{message}</div></div>
+      )}
     </div>
   );
 }

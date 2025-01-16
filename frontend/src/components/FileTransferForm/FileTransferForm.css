@@ -90,3 +90,32 @@
     background-color: #ebebeb;
     color: black;
   }
+
+  
+  
+  .MessageBarContainer {
+    box-sizing: border-box;
+    padding-top: 10px;
+  }
+
+  .MessageBarError {
+    font-weight: bold;
+    color: #be0000;
+    background-color: #ebebeb;
+    border: 2px solid #be0000;
+    padding: 10px 0px;
+    font-size: 13px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .MessageBar {
+    font-weight: bold;
+    color: #007900;
+    background-color: #ebebeb;
+    border: 2px solid #007900;
+    padding: 10px 0px;
+    font-size: 13px;
+    width: 100%;
+    box-sizing: border-box;
+  }
